@@ -138,12 +138,12 @@ void HuskyPlugin::Load(physics::ModelPtr _parent, sdf::ElementPtr _sdf )
   {
     int argc = 0;
     char** argv = NULL;
-    ros::init(argc, argv, "gazebo_husky", ros::init_options::NoSigintHandler|ros::init_options::AnonymousName);
+    ros::init(argc, argv, "gazebo_husky_fei", ros::init_options::NoSigintHandler|ros::init_options::AnonymousName);
   }
 
   rosnode_ = new ros::NodeHandle( node_namespace_ );
 
-  cmd_vel_sub_ = rosnode_->subscribe("husky/cmd_vel", 1, &HuskyPlugin::OnCmdVel, this );
+  cmd_vel_sub_ = rosnode_->subscribe("husky_fei/cmd_vel", 1, &HuskyPlugin::OnCmdVel, this );
 
   odom_pub_ = rosnode_->advertise<nav_msgs::Odometry>("odom", 1);
 
@@ -218,19 +218,19 @@ void HuskyPlugin::UpdateChild()
 
   // Can see NaN values here, just zero them out if needed
   if (isnan(d_bl)) {
-    ROS_WARN_THROTTLE(0.1, "Gazebo ROS Husky plugin. NaN in d_bl. Step time: %.2f. WD: %.2f. Velocity: %.2f", step_time.Double(), wd, joints_[BL]->GetVelocity(0));
+    ROS_WARN_THROTTLE(0.1, "Gazebo ROS FEI-modded Husky plugin. NaN in d_bl. Step time: %.2f. WD: %.2f. Velocity: %.2f", step_time.Double(), wd, joints_[BL]->GetVelocity(0));
     d_bl = 0;
   }
   if (isnan(d_br)) {
-    ROS_WARN_THROTTLE(0.1, "Gazebo ROS Husky plugin. NaN in d_br. Step time: %.2f. WD: %.2f. Velocity: %.2f", step_time.Double(), wd, joints_[BR]->GetVelocity(0));
+    ROS_WARN_THROTTLE(0.1, "Gazebo ROS FEI-modded Husky plugin. NaN in d_br. Step time: %.2f. WD: %.2f. Velocity: %.2f", step_time.Double(), wd, joints_[BR]->GetVelocity(0));
     d_br = 0;
   }
   if (isnan(d_fl)) {
-    ROS_WARN_THROTTLE(0.1, "Gazebo ROS Husky plugin. NaN in d_fl. Step time: %.2f. WD: %.2f. Velocity: %.2f", step_time.Double(), wd, joints_[FL]->GetVelocity(0));
+    ROS_WARN_THROTTLE(0.1, "Gazebo ROS FEI-modded Husky plugin. NaN in d_fl. Step time: %.2f. WD: %.2f. Velocity: %.2f", step_time.Double(), wd, joints_[FL]->GetVelocity(0));
     d_fl = 0;
   }
   if (isnan(d_fr)) {
-    ROS_WARN_THROTTLE(0.1, "Gazebo ROS Husky plugin. NaN in d_fr. Step time: %.2f. WD: %.2f. Velocity: %.2f", step_time.Double(), wd, joints_[FR]->GetVelocity(0));
+    ROS_WARN_THROTTLE(0.1, "Gazebo ROS FEI-modded Husky plugin. NaN in d_fr. Step time: %.2f. WD: %.2f. Velocity: %.2f", step_time.Double(), wd, joints_[FR]->GetVelocity(0));
     d_fr = 0;
   }
 
