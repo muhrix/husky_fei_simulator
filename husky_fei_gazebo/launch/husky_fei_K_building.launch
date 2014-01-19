@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<launch>
+    <include file="$(find fei_gaebo)/launch/start.launch">
+     <arg name="world" value="$(find fei_gazebo)/worlds/fei_K_building.world"/>
+    </include>
+    <include file="$(find husky_fei_gazebo)/launch/spawn_husky_fei.urdf.gazebo.launch"/>
+</launch>
