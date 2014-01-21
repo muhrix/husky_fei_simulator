@@ -29,29 +29,47 @@ This program is a launch file for spawning the Clearpath Husky A200
 robot model in Gazebo
 -->
 
-<launch>
-
-    <param name="use_sim_time" value="true" />
-
+<launch>  
+    <!-- push robot_description to factory and spawn robot in gazebo -->
+    <arg name="name" default="husky_fei"/>
+    <arg name="pos_x" default="0.0"/>
+    <arg name="pos_y" default="0.0"/>
+    <arg name="pos_z" default="0.0"/>
+    <arg name="rot_r" default="0.0"/>
+    <arg name="rot_p" default="0.0"/>
+    <arg name="rot_y" default="0.0"/>    
+    
     <!-- Send the Husky A200 Robot URDF/XACRO to param server -->
     <param name="robot_description" command="$(find xacro)/xacro.py '$(find husky_fei_description)/urdf/husky_fei.urdf.xacro'" />
 
     <!-- Spawn robot in gazebo -->
     <node name="spawn_husky_fei_model" pkg="gazebo_ros" type="spawn_model" 
-args="$(optenv ROBOT_INITIAL_POSE) -unpause -urdf -param robot_description -model mobile_base"/>
+          args="-param robot_description
+          -model $(arg name)
+          -unpause
+          -urdf
+          -x $(arg pos_x)
+          -y $(arg pos_y)
+          -z $(arg pos_z)
+          -R $(arg rot_r)
+          -P $(arg rot_p)
+          -Y $(arg rot_y)"
+          respawn="false" output="screen" />
 
     <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">
         <param name="publish_frequency" type="double" value="30.0" />
+        <param name="tf_prefix" type="string" value="$(arg name)" />
     </node>
 
     <node pkg="robot_pose_ekf" type="robot_pose_ekf" name="robot_pose_ekf">
-      <rosparam>
-        freq: 10.0
-        sensor_timeout: 1.0
-        publish_tf: true
-        odom_used: true
-        vo_used: true
-        output_frame: odom
-      </rosparam>
+      <param name="output_frame" value="odom"/>
+      <param name="publish_tf" value="true"/>
+      <param name="freq" value="30.0"/>
+      <param name="sensor_timeout" value="1.0"/>
+      <param name="odom_used" value="true"/>
+      <param name="imu_used" value="true"/>
+      <param name="vo_used" value="true"/>
+      <param name="debug" value="false"/>
+      <param name="self_diagnose" value="false"/>
     </node>
 </launch>
