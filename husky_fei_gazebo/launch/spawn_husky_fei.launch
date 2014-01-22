@@ -3,7 +3,7 @@
 
   <group ns="husky_fei">
     <include file="$(find husky_fei_gazebo)/launch/spawn_husky_fei.urdf.gazebo.launch">
-      <arg name="name" value="husky_1" />
+      <arg name="name" value="husky_fei" />
     </include>
   </group>
 <!--
