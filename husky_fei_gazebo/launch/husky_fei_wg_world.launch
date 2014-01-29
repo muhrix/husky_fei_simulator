@@ -1,5 +1,12 @@
 <?xml version="1.0"?>
 <launch>
     <include file="$(find gazebo_ros)/launch/willowgarage_world.launch"/>
-    <include file="$(find husky_fei_gazebo)/launch/spawn_husky_fei.urdf.gazebo.launch"/>
+    <include file="$(find husky_fei_gazebo)/launch/spawn_husky_fei.urdf.gazebo.launch">
+     <arg name="pos_x" value="0.0"/>
+     <arg name="pos_y" value="5.0"/>
+     <arg name="pos_z" value="0.0"/>
+     <arg name="rot_r" value="0.0"/>
+     <arg name="rot_p" value="0.0"/>
+     <arg name="rot_y" value="3.14159265359"/>
+    </include>    
 </launch>
