@@ -22,6 +22,14 @@
  * Adapted from the TurtleBot plugin
  * Author: Ryan Gariepy
  */ 
+ 
+ /*
+ * Modified by: Murilo F. M.
+ * Changes made so that Husky-FEI does not conflict with original Husky
+ * so that both can co-exist in Gazebo.
+ * In addition, since tf_prefix is deprecated, broadcast tfs must include
+ * the namespace (also to match the modified Xacro/URDF files).
+ */
 
 namespace gazebo
 {
@@ -43,6 +51,7 @@ namespace gazebo
 
       /// Parameters
       std::string node_namespace_;
+      std::string node_ns_;
       std::string bl_joint_name_;
       std::string br_joint_name_;
       std::string fl_joint_name_;

@@ -32,13 +32,21 @@
  * Adapted from the TurtleBot plugin
  * Author: Ryan Gariepy
  */ 
+ 
+/*
+ * Modified by: Murilo F. M.
+ * Changes made so that Husky-FEI does not conflict with original Husky
+ * so that both can co-exist in Gazebo.
+ * In addition, since tf_prefix is deprecated, broadcast tfs must include
+ * the namespace (also to match the modified Xacro/URDF files).
+ */
 
 #include <boost/thread.hpp>
 #include <nav_msgs/Odometry.h>
 #include <sensor_msgs/JointState.h>
 #include <geometry_msgs/Twist.h>
 
-#include <husky_plugin/husky_plugin.h>
+#include <husky_fei_plugin/husky_plugin.h>
 
 #include <ros/time.h>
 
@@ -49,7 +57,7 @@ enum {BL= 0, BR=1, FL=2, FR=3};
 HuskyPlugin::HuskyPlugin()
 {
   kill_sim = false;
-  this->spinner_thread_ = new boost::thread( boost::bind( &HuskyPlugin::spin, this) );
+  spinner_thread_ = new boost::thread( boost::bind( &HuskyPlugin::spin, this) );
 
   wheel_speed_ = new float[2];
   wheel_speed_[BL] = 0.0;
@@ -74,20 +82,23 @@ HuskyPlugin::~HuskyPlugin()
 
   rosnode_->shutdown();
   kill_sim = true;
-  this->spinner_thread_->join();
-  delete this->spinner_thread_;
+  spinner_thread_->join();
+  delete spinner_thread_;
   delete [] wheel_speed_;
   delete rosnode_;
 }
     
 void HuskyPlugin::Load(physics::ModelPtr _parent, sdf::ElementPtr _sdf )
 {
-  this->model_ = _parent;
-  this->world_ = this->model_->GetWorld();
+  model_ = _parent;
+  world_ = model_->GetWorld();
 
-  this->node_namespace_ = "";
-  if (_sdf->HasElement("robotNamespace"))
-    this->node_namespace_ = _sdf->GetElement("robotNamespace")->Get<std::string>() + "/";
+  node_ns_ = "";
+  node_namespace_ = "";
+  if (_sdf->HasElement("robotNamespace")) {
+    node_namespace_ = _sdf->GetElement("robotNamespace")->Get<std::string>() + "/";
+    node_ns_ = _sdf->GetElement("robotNamespace")->Get<std::string>();
+  }
 
 
   bl_joint_name_ = "backLeftJoint";
@@ -133,6 +144,10 @@ void HuskyPlugin::Load(physics::ModelPtr _parent, sdf::ElementPtr _sdf )
   this->updateConnection = event::Events::ConnectWorldUpdateBegin(
       boost::bind(&HuskyPlugin::UpdateChild, this));
   gzdbg << "Plugin model name: " << modelName << "\n";
+  gzdbg << "Base geometry name: " << base_geom_name_ << "\n";
+  gzdbg << "Node namespace: " << node_ns_ << "\n";
+  gzdbg << "Wheel diameter: " << wheel_diam_ << "\n";
+  gzdbg << "Torque: " << torque_ << "\n";
 
   if (!ros::isInitialized())
   {
@@ -183,7 +198,7 @@ void HuskyPlugin::Load(physics::ModelPtr _parent, sdf::ElementPtr _sdf )
   if (joints_[FR]) set_joints_[FR] = true;
 
   //initialize time and odometry position
-  prev_update_time_ = last_cmd_vel_time_ = this->world_->GetSimTime();
+  prev_update_time_ = last_cmd_vel_time_ = world_->GetSimTime();
   odom_pose_[0] = 0.0;
   odom_pose_[1] = 0.0;
   odom_pose_[2] = 0.0;
@@ -192,7 +207,7 @@ void HuskyPlugin::Load(physics::ModelPtr _parent, sdf::ElementPtr _sdf )
 
 void HuskyPlugin::UpdateChild()
 {
-  common::Time time_now = this->world_->GetSimTime();
+  common::Time time_now = world_->GetSimTime();
   common::Time step_time = time_now - prev_update_time_;
   prev_update_time_ = time_now;
 
@@ -269,11 +284,14 @@ void HuskyPlugin::UpdateChild()
     joints_[FR]->SetMaxForce( 0, torque_ );
   }
 
+  std::string str;
   nav_msgs::Odometry odom;
   odom.header.stamp.sec = time_now.sec;
   odom.header.stamp.nsec = time_now.nsec;
-  odom.header.frame_id = "odom";
-  odom.child_frame_id = "base_footprint";
+  str = node_ns_ + "_odom";
+  odom.header.frame_id = str;
+  str = node_ns_ + "_base_footprint";
+  odom.child_frame_id = str;
   odom.pose.pose.position.x = odom_pose_[0];
   odom.pose.pose.position.y = odom_pose_[1];
   odom.pose.pose.position.z = 0;
