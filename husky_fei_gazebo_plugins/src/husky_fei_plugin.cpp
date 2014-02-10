@@ -46,7 +46,7 @@
 #include <sensor_msgs/JointState.h>
 #include <geometry_msgs/Twist.h>
 
-#include <husky_fei_plugin/husky_plugin.h>
+#include <husky_fei_plugin/husky_fei_plugin.h>
 
 #include <ros/time.h>
 
