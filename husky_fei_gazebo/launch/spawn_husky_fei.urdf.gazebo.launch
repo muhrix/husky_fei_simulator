@@ -8,6 +8,15 @@
     <arg name="rot_r" default="0.0"/>
     <arg name="rot_p" default="0.0"/>
     <arg name="rot_y" default="0.0"/>
+    <!-- GPS latitude and longitude (heading should be 90.0) default to Fukushima
+    <arg name="lat_ref" default="37.316357"/>
+    <arg name="lon_ref" default="141.026065"/> -->
+    <!-- GPS latitude and longitude (heading is rot_y) default to Battersea Power Station
+    <arg name="lat_ref" default="51.481779"/>
+    <arg name="lon_ref" default="-0.144564"/> -->
+    <!-- GPS latitude and longitude (heading is rot_y) default to London Olympic Park -->
+    <arg name="lat_ref" default="51.538425"/>
+    <arg name="lon_ref" default="-0.012641"/>
 
     <!-- push robot_description to factory and spawn model into Gazebo -->
     
@@ -15,7 +24,10 @@
     <param name="robot_description"
            command="$(find xacro)/xacro.py 
                     '$(find husky_fei_description)/urdf/husky_fei.urdf.xacro'
-                    prefix:=$(arg robot_name)"/>
+                    prefix:=$(arg robot_name)
+                    lat:=$(arg lat_ref)
+                    lon:=$(arg lon_ref)
+                    head:=0.0"/>
     
     <!-- Spawn robot in gazebo -->
     <node name="spawn_husky_fei_model" pkg="gazebo_ros" type="spawn_model"
