@@ -2,6 +2,7 @@
 <launch>
     <!-- <param name="use_sim_time" value="true" /> -->
     <arg name="robot_name" default="husky_fei"/>
+    <arg name="world_frame" default="/map"/>
     <arg name="pos_x" default="0.0"/>
     <arg name="pos_y" default="0.0"/>
     <arg name="pos_z" default="0.0"/>
@@ -14,9 +15,12 @@
     <!-- GPS latitude and longitude (heading is rot_y) default to Battersea Power Station
     <arg name="lat_ref" default="51.481779"/>
     <arg name="lon_ref" default="-0.144564"/> -->
-    <!-- GPS latitude and longitude (heading is rot_y) default to London Olympic Park -->
+    <!-- GPS latitude and longitude (heading is rot_y) default to London Olympic Park
     <arg name="lat_ref" default="51.538425"/>
-    <arg name="lon_ref" default="-0.012641"/>
+    <arg name="lon_ref" default="-0.012641"/> -->
+    <!-- GPS latitude and longitude (heading is rot_y) default to London Christ the Redeemer -->
+    <arg name="lat_ref" default="-22.951880"/>
+    <arg name="lon_ref" default="-43.211428"/>
 
     <!-- push robot_description to factory and spawn model into Gazebo -->
     
@@ -48,20 +52,20 @@
           output="screen">
         <param name="publish_frequency" type="double" value="50.0" />
     </node>
-    <!--
+    
     <node pkg="tf" 
           type="static_transform_publisher" 
-          name="$(arg robot_name)_initial_pose"
+          name="$(arg robot_name)_initial_pose" 
           args="$(arg pos_x) 
                 $(arg pos_y) 
                 $(arg pos_z) 
                 $(arg rot_r) 
                 $(arg rot_p) 
-                $(arg rot_y)
-                /map
-                $(arg robot_name)_odom_combined
-                100" />    
-    -->
+                $(arg rot_y) 
+                $(arg world_frame) 
+                $(arg robot_name)_odom_combined 
+                50" />
+           
                 
     <!-- odometry estimator -->
     <node pkg="robot_pose_ekf" type="robot_pose_ekf" name="robot_pose_ekf" output="screen">
