@@ -3,6 +3,7 @@
     <!-- <param name="use_sim_time" value="true" /> -->
     <arg name="robot_name" default="husky_fei"/>
     <arg name="world_frame" default="/map"/>
+    <arg name="odom_output_frame_suffix" default="odom_combined"/>
     <arg name="pos_x" default="0.0"/>
     <arg name="pos_y" default="0.0"/>
     <arg name="pos_z" default="0.0"/>
@@ -63,13 +64,14 @@
                 $(arg rot_p) 
                 $(arg rot_y) 
                 $(arg world_frame) 
-                $(arg robot_name)_odom_combined 
+                $(arg robot_name)_$(arg odom_output_frame_suffix) 
                 50" />
            
                 
     <!-- odometry estimator -->
     <node pkg="robot_pose_ekf" type="robot_pose_ekf" name="robot_pose_ekf" output="screen">
-      <param name="output_frame" value="$(arg robot_name)_odom_combined"/>
+      <!-- <param name="output_frame" value="$(arg robot_name)_odom_combined"/> -->
+      <param name="output_frame" value="$(arg robot_name)_$(arg odom_output_frame_suffix)"/>
       <param name="base_footprint_frame" value="$(arg robot_name)_base_footprint"/>
       <param name="publish_tf" value="true"/>
       <param name="freq" value="30.0"/>
