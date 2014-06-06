@@ -3,6 +3,8 @@
     <include file="$(find fei_gazebo)/launch/start.launch">
      <arg name="world" value="$(find fei_gazebo)/worlds/fei_K_building.world"/>
     </include>
+    <include file="$(find husky_fei_gazebo)/launch/spawn_husky_fei.launch"/>
+    <!--
     <include file="$(find husky_fei_gazebo)/launch/spawn_husky_fei.urdf.gazebo.launch">
      <arg name="pos_x" value="0.0"/>
      <arg name="pos_y" value="0.0"/>
@@ -11,4 +13,5 @@
      <arg name="rot_p" value="0.0"/>
      <arg name="rot_y" value="0.0"/>
     </include>
+    -->
 </launch>

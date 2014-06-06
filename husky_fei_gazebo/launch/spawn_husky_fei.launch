@@ -1,11 +1,12 @@
 <?xml version="1.0"?>
 <launch>
     <group ns="husky_1">
-      <include file="$(find husky_fei_gazebo)/launch/spawn_husky_fei.urdf.gazebo.launch" >
+      <include file="$(find husky_fei_gazebo)/launch/husky_fei.urdf.gazebo.launch" >
         <arg name="robot_name" value="husky_1" />
+        <arg name="world_frame" value="/world" />
         <arg name="pos_y" value="-1.0" />
       </include>
-      <!-- <node pkg="tf" type="static_transform_publisher" name="world_odom_tf" args="0 0 0 0 0 0 /world husky_fei/odom 100" /> -->
+      <!--<node pkg="tf" type="static_transform_publisher" name="world_odom_tf" args="0 0 0 0 0 0 /world husky_fei/odom 50" /> -->
     </group>
     <!--
     <group ns="husky_1">

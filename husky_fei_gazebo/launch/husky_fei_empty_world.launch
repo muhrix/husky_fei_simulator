@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
 <launch>
     <include file="$(find gazebo_ros)/launch/empty_world.launch"/>
-    <include file="$(find husky_fei_gazebo)/launch/spawn_husky_fei.urdf.gazebo.launch"/>
+    <include file="$(find husky_fei_gazebo)/launch/spawn_husky_fei.launch"/>
 </launch>
