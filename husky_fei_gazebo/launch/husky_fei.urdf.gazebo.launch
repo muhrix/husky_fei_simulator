@@ -22,6 +22,12 @@
     <!-- GPS latitude and longitude (heading is rot_y) default to London Christ the Redeemer -->
     <arg name="lat_ref" default="-22.951880"/>
     <arg name="lon_ref" default="-43.211428"/>
+    <arg name="alt_ref" default="0.0"/>
+    <arg name="head_ref" default="0.0"/>
+    
+    <param name="gps_ref_latitude" type="double" value="$(arg lat_ref)" />
+    <param name="gps_ref_longitude" type="double" value="$(arg lon_ref)" />
+    <param name="gps_ref_altitude" type="double" value="$(arg alt_ref)" />
 
     <!-- push robot_description to factory and spawn model into Gazebo -->
     
@@ -32,7 +38,7 @@
                     prefix:=$(arg robot_name)
                     lat:=$(arg lat_ref)
                     lon:=$(arg lon_ref)
-                    head:=0.0"/>
+                    head:=$(arg head_ref)"/>
     
     <!-- Spawn robot in gazebo -->
     <node name="spawn_husky_fei_model" pkg="gazebo_ros" type="spawn_model"

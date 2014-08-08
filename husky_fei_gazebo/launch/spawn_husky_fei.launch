@@ -5,7 +5,20 @@
         <arg name="robot_name" value="husky_1" />
         <arg name="world_frame" value="/world" />
         <arg name="odom_output_frame_suffix" value="odom_combined" />
-        <arg name="pos_y" value="-1.0" />
+        <!--
+        http://gis.stackexchange.com/questions/2951/algorithm-for-offsetting-a-latitude-longitude-by-some-amount-of-meters
+        111,111.1 metres in the y direction is roughly equivalent to 1 degree (of latitude)
+        hence 111,111.1 * cos(latitude) metres in x = 1 degree of longitude
+        and 1.1111111 metre = 0.00001 degrees
+        cos(-22.951880) = 0.921 => 0.921 * 111,111.1 = 102,314.73
+        -->
+        
+        <!-- <arg name="pos_x" value="5.0" />
+        <arg name="pos_y" value="-1.0" /> -->
+        <arg name="lat_ref" value="-22.951880" />
+        <arg name="lon_ref" value="-43.211428" />
+        <arg name="alt_ref" value="0.0" />
+        <arg name="head_ref" value="0.0" />
       </include>
     </group>
     <!--
