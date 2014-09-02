@@ -18,6 +18,7 @@
         <arg name="lat_ref" value="-22.951880" />
         <arg name="lon_ref" value="-43.211428" />
         <arg name="alt_ref" value="0.0" />
+        <!-- <arg name="head_ref" value="1.57079632679" /> -->
         <arg name="head_ref" value="0.0" />
       </include>
     </group>
