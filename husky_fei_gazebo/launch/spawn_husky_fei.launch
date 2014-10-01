@@ -1,8 +1,10 @@
 <?xml version="1.0"?>
 <launch>
     <group ns="husky_1">
+      <!-- <param name="tf_prefix" value="husky_fei" /> -->
       <include file="$(find husky_fei_gazebo)/launch/husky_fei.urdf.gazebo.launch" >
-        <arg name="robot_name" value="husky_1" />
+        <arg name="robot_namespace" value="husky_1" />
+        <arg name="robot_tf_prefix" value="husky_1" />
         <arg name="world_frame" value="/world" />
         <arg name="odom_output_frame_suffix" value="odom_combined" />
         <!--
@@ -13,8 +15,8 @@
         cos(-22.951880) = 0.921 => 0.921 * 111,111.1 = 102,314.73
         -->
         
-        <!-- <arg name="pos_x" value="5.0" />
-        <arg name="pos_y" value="-1.0" /> -->
+        <!-- <arg name="pos_x" value="5.0" /> -->
+        <arg name="pos_y" value="-1.0" />
         <arg name="lat_ref" value="-22.951880" />
         <arg name="lon_ref" value="-43.211428" />
         <arg name="alt_ref" value="0.0" />
@@ -22,14 +24,19 @@
         <arg name="head_ref" value="0.0" />
       </include>
     </group>
-    <!--
+
     <group ns="husky_2">
       <include file="$(find husky_fei_gazebo)/launch/husky_fei.urdf.gazebo.launch" >
-        <arg name="robot_name" value="husky_2" />
+        <arg name="robot_namespace" value="husky_2" />
+        <arg name="robot_tf_prefix" value="husky_2" />
         <arg name="world_frame" value="/world" />
         <arg name="odom_output_frame_suffix" value="odom_combined" />
         <arg name="pos_y" value="1.0" />
+        <arg name="lat_ref" value="-22.951880" />
+        <arg name="lon_ref" value="-43.211428" />
+        <arg name="alt_ref" value="0.0" />
+        <arg name="head_ref" value="0.0" />
       </include>
     </group>
-    -->
+
 </launch>
