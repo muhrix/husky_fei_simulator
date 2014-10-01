@@ -1,7 +1,8 @@
 <?xml version="1.0"?>
 <launch>
     <!-- <param name="use_sim_time" value="true" /> -->
-    <arg name="robot_name" default="husky_fei"/>
+    <arg name="robot_namespace" default="husky_fei"/>
+    <arg name="robot_tf_prefix" default="husky_fei"/>
     <arg name="world_frame" default="/map"/>
     <arg name="odom_output_frame_suffix" default="odom_combined"/>
     <arg name="pos_x" default="0.0"/>
@@ -35,7 +36,8 @@
     <param name="robot_description"
            command="$(find xacro)/xacro.py 
                     '$(find husky_fei_description)/urdf/husky_fei.urdf.xacro'
-                    prefix:=$(arg robot_name)
+                    prefix:=$(arg robot_tf_prefix)
+                    robotns:=$(arg robot_namespace)
                     lat:=$(arg lat_ref)
                     lon:=$(arg lon_ref)
                     head:=$(arg head_ref)"/>
@@ -43,7 +45,7 @@
     <!-- Spawn robot in gazebo -->
     <node name="spawn_husky_fei_model" pkg="gazebo_ros" type="spawn_model"
           args="-param robot_description
-          -model $(arg robot_name)
+          -model $(arg robot_tf_prefix)
           -unpause
           -urdf
           -x $(arg pos_x)
@@ -62,7 +64,7 @@
     
     <node pkg="tf" 
           type="static_transform_publisher" 
-          name="$(arg robot_name)_initial_pose" 
+          name="$(arg robot_tf_prefix)_initial_pose" 
           args="$(arg pos_x) 
                 $(arg pos_y) 
                 $(arg pos_z) 
@@ -70,15 +72,15 @@
                 $(arg rot_p) 
                 $(arg rot_y) 
                 $(arg world_frame) 
-                $(arg robot_name)_$(arg odom_output_frame_suffix) 
+                $(arg robot_tf_prefix)_$(arg odom_output_frame_suffix) 
                 50" />
            
                 
     <!-- odometry estimator -->
     <node pkg="robot_pose_ekf" type="robot_pose_ekf" name="robot_pose_ekf" output="screen">
-      <!-- <param name="output_frame" value="$(arg robot_name)_odom_combined"/> -->
-      <param name="output_frame" value="$(arg robot_name)_$(arg odom_output_frame_suffix)"/>
-      <param name="base_footprint_frame" value="$(arg robot_name)_base_footprint"/>
+      <!-- <param name="output_frame" value="$(arg robot_tf_prefix)_odom_combined"/> -->
+      <param name="output_frame" value="$(arg robot_tf_prefix)_$(arg odom_output_frame_suffix)"/>
+      <param name="base_footprint_frame" value="$(arg robot_tf_prefix)_base_footprint"/>
       <param name="publish_tf" value="true"/>
       <param name="freq" value="30.0"/>
       <param name="sensor_timeout" value="1.0"/>
@@ -89,6 +91,7 @@
       <param name="debug" value="false"/>
       <param name="self_diagnose" value="false"/>
       
-      <remap from="robot_pose_ekf/$(arg robot_name)_odom_combined" to="odom_combined"/>
+      <remap from="robot_pose_ekf/$(arg robot_tf_prefix)_odom_combined" to="odom_combined"/>
+      <remap from="imu_data" to="imu"/>
     </node>
 </launch>
